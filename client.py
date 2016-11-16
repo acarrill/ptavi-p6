@@ -5,28 +5,40 @@ Programa cliente que abre un socket a un servidor
 """
 
 import socket
+import sys
 
 # Cliente UDP simple.
 
-# Dirección IP del servidor.
-SERVER = 'localhost'
-PORT = 6001
-
-# Contenido que vamos a enviar
-LINE = '¡Hola mundo!'
+# Parámetros para establecer la conexión.
+try:
+    Method = sys.argv[1].upper()
+    ReceiverLogin = sys.argv[2].split('@')[0]
+    ReceiverIP = (sys.argv[2].split('@')[1]).split(':')[0]
+#Comprueba si el puerto es un digito antes de asignarlo
+    if not str.isdigit(sys.argv[2].split(':')[1]):
+        raise IndexError
+    ReceiverPort = int(sys.argv[2].split(':')[1])
+except IndexError:
+    print("Usage: python client.py method receiver@IP:SIPport ")
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
-my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-my_socket.connect((SERVER, PORT))
-
-print("Enviando: " + LINE)
-my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
-data = my_socket.recv(1024)
-
-print('Recibido -- ', data.decode('utf-8'))
-print("Terminando socket...")
-
-# Cerramos todo
-my_socket.close()
-print("Fin.")
+if __name__ == "__main__":
+    """Se crea socket y se manda método al server"""
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
+        my_socket.connect((ReceiverIP, ReceiverPort))
+        Message = (Method + ' sip:' + ReceiverLogin + '@' +
+                    ReceiverIP + ' SIP/2.0')
+                    
+        print("Enviando:", Message)
+        my_socket.send(bytes(Message, 'utf-8') + b'\r\n\r\n')
+        data = my_socket.recv(1024)
+        Answer = data.decode('utf-8')
+        if Answer == ('SIP/2.0 100 Trying\r\n'
+                      'SIP/2.0 180 Ring\r\n'
+                      'SIP/2.0 200 OK\r\n\r\n'):
+        	Method = 'ACK'
+        	Message = (Method + ' sip:' + ReceiverLogin + '@' +
+                    	ReceiverIP + ' SIP/2.0')
+        my_socket.send(bytes(Message, 'utf-8') + b'\r\n\r\n')
+        print('Recibido -- ', data.decode('utf-8'))
+        print("Socket terminado.")
