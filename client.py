@@ -35,7 +35,7 @@ if __name__ == "__main__":
         Answer = data.decode('utf-8')
         if Answer == ('SIP/2.0 100 Trying\r\n'
                       'SIP/2.0 180 Ring\r\n'
-                      'SIP/2.0 200 OK\r\n\r\n'):
+                      'SIP/2.0 200 OK'):
         	Method = 'ACK'
         	Message = (Method + ' sip:' + ReceiverLogin + '@' +
                     	ReceiverIP + ' SIP/2.0')
