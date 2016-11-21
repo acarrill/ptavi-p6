@@ -31,7 +31,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
     def handle(self):
         """Manejador de conexión"""
         Received = self.rfile.read().decode('utf-8')
-        ListReceived = Received.split(' ')  #  Lista de la cadena recibida
+        ListReceived = Received.split(' ')  # Lista de la cadena recibida
         ClientMethod = ListReceived[0]
 
         if len(ListReceived) != 3 or ListReceived[2] != 'SIP/2.0\r\n\r\n':
