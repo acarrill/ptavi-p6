@@ -28,6 +28,7 @@ if __name__ == "__main__":
         my_socket.connect((ReceiverIP, ReceiverPort))
         Message = (Method + ' sip:' + ReceiverLogin + '@' +
                    ReceiverIP + ' SIP/2.0')
+
         print("Enviando:", Message)
         my_socket.send(bytes(Message, 'utf-8') + b'\r\n\r\n')
         data = my_socket.recv(1024)
@@ -36,9 +37,9 @@ if __name__ == "__main__":
               'SIP/2.0 180 Ring\r\n\r\n'
               'SIP/2.0 200 OK\r\n\r\n')
         if Answer == OK and Method == 'INVITE':
-        	Method = 'ACK'
-        	Message = (Method + ' sip:' + ReceiverLogin + '@' +
-                    	ReceiverIP + ' SIP/2.0')
+            Method = 'ACK'
+            Message = (Method + ' sip:' + ReceiverLogin + '@' +
+                       ReceiverIP + ' SIP/2.0')
         try:  # Evitamos que se envien mensajes BYE innecesarios
             if Method == 'BYE':
                 raise KeyboardInterrupt
