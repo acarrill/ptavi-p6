@@ -40,7 +40,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                             'SIP/2.0 180 Ring\r\n\r\n'
                             'SIP/2.0 200 OK\r\n\r\n', 'utf-8'))
         elif ClientMethod == 'BYE':
-            self.wfile.write(b('SIP/2.0 200 OK\r\n\r\n'))
+            self.wfile.write(b'SIP/2.0 200 OK\r\n\r\n')
         elif ClientMethod == 'ACK':
             ToClientExe = './mp32rtp -i 127.0.0.1 -p 23032 < ' + Audio
             os.system(ToClientExe)
