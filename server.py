@@ -10,12 +10,12 @@ import os
 
 try:
     ServerIP = sys.argv[1]
-    if not str.isdigit(sys.argv[2]): #Controla si hay letras como puerto
+    if not str.isdigit(sys.argv[2]):  # Controla si hay letras como puerto
         raise IndexError
     ServerPort = int(sys.argv[2])
     Audio = sys.argv[3]
     print("Listening...")
-    if not os.path.exists(Audio): #Comprueba que existe el fichero audio
+    if not os.path.exists(Audio):  # Comprueba que existe el fichero audio
         raise OSError
 except IndexError:
     print("Usage: python server.py IP port audio_file")
@@ -33,12 +33,13 @@ class EchoHandler(socketserver.DatagramRequestHandler):
         Received = self.rfile.read().decode('utf-8')
         ListReceived = Received.split(' ') #Lista de la cadena recibida
         ClientMethod = ListReceived[0]
+
         if len(ListReceived) != 3 or ListReceived[2] != 'SIP/2.0\r\n\r\n':
             self.wfile.write(b'SIP/2.0 400 Bad Request\r\n\r\n')
         elif ClientMethod == 'INVITE':
             self.wfile.write(bytes('SIP/2.0 100 Trying\r\n\r\n'
-                            'SIP/2.0 180 Ring\r\n\r\n'
-                            'SIP/2.0 200 OK\r\n\r\n', 'utf-8'))
+                                   'SIP/2.0 180 Ring\r\n\r\n'
+                                   'SIP/2.0 200 OK\r\n\r\n', 'utf-8'))
         elif ClientMethod == 'BYE':
             self.wfile.write(b'SIP/2.0 200 OK\r\n\r\n')
         elif ClientMethod == 'ACK':

@@ -36,6 +36,7 @@ if __name__ == "__main__":
         OK = ('SIP/2.0 100 Trying\r\n\r\n'  # Invite recibido correctamente
               'SIP/2.0 180 Ring\r\n\r\n'
               'SIP/2.0 200 OK\r\n\r\n')
+
         if Answer == OK and Method == 'INVITE':
             Method = 'ACK'
             Message = (Method + ' sip:' + ReceiverLogin + '@' +
@@ -46,5 +47,6 @@ if __name__ == "__main__":
             my_socket.send(bytes(Message, 'utf-8') + b'\r\n\r\n')
         except KeyboardInterrupt:
             print("You has been disconected from server")
+
         print('Recibido -- ', data.decode('utf-8'))
         print("Socket terminado.")
